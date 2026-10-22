@@ -1,1 +1,5 @@
-print("Welcome to the jungle")
+# main.py
+
+from game import game
+
+game()
