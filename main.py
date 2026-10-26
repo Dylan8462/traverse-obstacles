@@ -1,3 +1,3 @@
 # main.py
 
-print("Welcome to the jungle")
+print("welcome to the jungle")
