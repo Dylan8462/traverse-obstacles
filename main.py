@@ -1,5 +1,6 @@
 # main.py
 
-from game import game
+from game import Game
 
-game()
+game = Game()
+game.run()
