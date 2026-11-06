@@ -9,3 +9,10 @@ class GameState(Enum):
     PAUSED = auto()
     GAMEOVER = auto()
     QUIT = auto()
+
+class Facing(Enum):
+    UP = auto()
+    DOWN = auto()
+    LEFT = auto()
+    RIGHT = auto()
+    NONE = auto()
