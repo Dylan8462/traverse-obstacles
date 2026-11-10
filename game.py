@@ -2,7 +2,7 @@
 import pygame as pg
 
 import settings as st
-from object import Object
+from enemy import Enemy
 from player import Player
 from states import GameState
 
@@ -13,10 +13,14 @@ class Game:
         
         self.screen: pg.Surface = pg.display.set_mode((0, 0), pg.FULLSCREEN)
         self.clock: pg.time.Clock = pg.time.Clock()
+
+        self.dt: float = 0.0
         
         self.state: GameState = GameState.PLAYING
         
-        self.player: Player = Player(30, 30)
+        self.player: Player = Player()
+        self.truck: Enemy = Enemy()
+        
         
     # main game loop 
     def run(self) -> None:
@@ -46,12 +50,20 @@ class Game:
     # all object update methods
     def update(self) -> None:
         if self.state == GameState.PLAYING:
+            
+            # updates
             self.player.update()
+            self.truck.update(self.screen.get_rect())
 
-        print(self.player.sheet.get_size())
+            # collisions
+            if self.player.body.colliderect(self.truck.body):
+                self.player.die()
 
     # render all items
     def render(self) -> None:
         self.screen.fill(pg.Color("black"))
+        
         self.screen.blit(self.player.image, self.player.body)
+        self.screen.blit(self.truck.image, self.truck.body)
+        
         pg.display.flip()

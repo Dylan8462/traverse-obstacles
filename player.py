@@ -4,21 +4,27 @@ import pygame as pg
 
 import settings as st
 from object import Object
-from states import Facing
+from states import Facing, Status
 
 
 class Player(Object):
-    def __init__(self, w: float, h: float) -> None:
-        super().__init__(w, h)
+    def __init__(self) -> None:
+        super().__init__()
 
-        self.images = self.build_images()
+        self.images = super().build_images(105, 30)
         self.dir: Facing = Facing.UP
         self.body = self.images[self.dir].get_rect(center = (500, 500))
+        self.image = self.images[self.dir]
         
         self.move_tiles: float = 15 * st.SCALE
         
     def update(self) -> None:
+
+        
         self.image = self.images[self.dir]
+
+    def die(self) -> None:
+        self.state = Status.DEAD
 
     def keyvent(self, key: int) -> None:
         match key:
@@ -35,21 +41,4 @@ class Player(Object):
                 self.body.move_ip(0, self.move_tiles)
                 self.dir = Facing.DOWN
 
-    def build_images(self) -> dict[Facing, pg.Surface]:
-        images: dict[Facing, pg.Surface] = {}
-
-        frame: pg.Rect = pg.Rect(105, 30, 15, 15)
-
-        for dir in Facing:
-            if dir is Facing.NONE:
-                continue
-
-            raw = self.sheet.subsurface(frame)
-
-            images[dir] = pg.transform.scale(raw, (frame.w * st.SCALE, frame.h * st.SCALE))
-
-        images[Facing.RIGHT] = pg.transform.flip(images[Facing.RIGHT], True, False)
-        images[Facing.UP] = pg.transform.rotate(images[Facing.LEFT], -90)
-        images[Facing.DOWN] = pg.transform.flip(images[Facing.UP], False, True)
-        
-        return images
+   

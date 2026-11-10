@@ -16,3 +16,8 @@ class Facing(Enum):
     LEFT = auto()
     RIGHT = auto()
     NONE = auto()
+
+class Status(Enum):
+    DEAD = auto()
+    DYING = auto()
+    LIVING = auto()
