@@ -18,7 +18,7 @@ class Game:
         
         self.state: GameState = GameState.PLAYING
         
-        self.player: Player = Player()
+        self.player: Player = Player(self.screen.get_rect().width / 2, self.screen.get_rect().height)
         self.truck: Enemy = Enemy()
         
         
