@@ -10,7 +10,7 @@ from states import Facing, Status
 
 class Object:
     def __init__(self) -> None:
-        self.sheet: pg.Surface = pg.image.load(Path(__file__).parent / "assets" / "SpriteSheet.png").convert_alpha()
+        self.sheet: pg.Surface = pg.image.load(Path(__file__).parent / ".." / "assets" / "SpriteSheet.png").convert_alpha()
 
         self.dir = Facing.NONE
         self.state = Status.LIVING
