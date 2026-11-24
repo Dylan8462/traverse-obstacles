@@ -1,32 +1,40 @@
 # enemy.py
 
+import random
+
 import pygame as pg
 
 import settings as st
 from object import Object
 from states import Facing
 
+CAR_SPRITES = [(0, 32), (32, 32), (64, 32), (96, 32)]   # (left, top) on the sheet, 32 x 16 each
+
 
 class Enemy(Object):
-    def __init__(self) -> None:
-        super().__init__()
+    """
+     Representation of a car per row with road tiles
+    """
 
-        self.images = super().build_images(75, 30, 30, 15)
-        self.dir: Facing = Facing.RIGHT
-        self.body = self.images[self.dir].get_rect(center = (800, 300))
-        self.image = self.images[self.dir]
+    def __init__(self, row: int, x: float, direction: int, speed: float) -> None:
+        left, top = random.choice(CAR_SPRITES)
+        
+        super().__init__(x, row * st.TILE, Object.sprite(left, top, 32, 16, flip = direction < 0))
 
-        self.speed: float = 2.0
+        self.dir: Facing = Facing.RIGHT if direction > 0 else Facing.LEFT
+        self.speed: float = direction * speed
 
-    def update(self, screen_rect: pg.Rect) -> None:
-        self.body.move_ip(self.speed, 0)
+        self.x: float
 
-        if not screen_rect.contains(self.body):
-            self.speed *= -1
+    def hitbox(self) -> pg.Rect:
+        return self.rect().inflate(-4, -6)   # a bit smaller than the sprite
+    
+    def update(self, dt: float) -> None:
+        self.x += self.speed * dt
 
-            if self.dir is Facing.LEFT:
-                self.dir = Facing.RIGHT
-            elif self.dir is Facing.RIGHT:
-                self.dir = Facing.LEFT
-
-        self.image = self.images[self.dir]
+        w: int = self.image.get_width()
+        
+        if self.speed > 0 and self.x > st.WIDTH + w: # right moving case -> wrap to left side
+            self.x = -w
+        elif self.speed < 0 and self.x < -w:         # left moving case -> wrap to right side 
+            self.x = st.WIDTH + w
